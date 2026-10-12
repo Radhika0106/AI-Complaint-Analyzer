@@ -1,0 +1,23 @@
+{
+  "name": "ai-complaint-analyzer",
+  "version": "1.0.0",
+  "description": "AI Complaint Analyzer using Node.js, Express and keyword-based analysis",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "complaint",
+    "analyzer",
+    "ai",
+    "express",
+    "ticket"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^18.0.4",
+    "express": "^5.1.0"
+  }
+}
