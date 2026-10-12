@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | AI Complaint Analyzer</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .navbar {
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #4f46e5;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4f46e5;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .main {
+            padding: 40px 5%;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #667085;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .stat-card h3 {
+            font-size: 28px;
+            margin-bottom: 7px;
+        }
+
+        .stat-card p {
+            color: #667085;
+            font-size: 14px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .card h2 {
+            margin-bottom: 10px;
+        }
+
+        .card-description {
+            color: #667085;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .complaint-box {
+            border: 2px dashed #d9dce3;
+            padding: 35px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .complaint-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .complaint-box h3 {
+            margin-bottom: 8px;
+        }
+
+        .complaint-box p {
+            color: #667085;
+            margin-bottom: 20px;
+        }
+
+        .primary-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 13px 22px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .secondary-btn {
+            background: #eef2ff;
+            color: #4f46e5;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .quick-action {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 17px 0;
+            border-bottom: 1px solid #edf0f5;
+            cursor: pointer;
+        }
+
+        .quick-action:last-child {
+            border-bottom: none;
+        }
+
+        .action-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: #eef2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .quick-action h4 {
+            margin-bottom: 4px;
+        }
+
+        .quick-action p {
+            color: #667085;
+            font-size: 13px;
+        }
+
+        .recent {
+            margin-top: 25px;
+        }
+
+        .ticket {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 17px 0;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .ticket:last-child {
+            border-bottom: none;
+        }
+
+        .ticket-id {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .ticket-category {
+            color: #667085;
+            font-size: 13px;
+        }
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .open {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .resolved {
+            background: #f0fdf4;
+            color: #15803d;
+        }
+
+        .logout {
+            background: transparent;
+            border: none;
+            color: #667085;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .main {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            AI <span>Complaint Analyzer</span>
+        </div>
+
+        <div class="profile">
+
+            <button class="logout" onclick="logout()">
+                Logout
+            </button>
+
+            <div class="avatar">
+                U
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <main class="main">
+
+        <section class="welcome">
+
+            <h1>
+                Welcome back! 👋
+            </h1>
+
+            <p>
+                Manage your complaints and track their progress from one place.
+            </p>
+
+        </section>
+
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <h3>0</h3>
+                <p>Total Complaints</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>0</h3>
+                <p>Open Complaints</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>0</h3>
+                <p>In Progress</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>0</h3>
+                <p>Resolved</p>
+            </div>
+
+        </section>
+
+
+        <section class="dashboard-grid">
+
+
+            <div class="card">
+
+                <h2>
+                    Submit a Complaint
+                </h2>
+
+                <p class="card-description">
+                    Tell us about your problem and our AI system
+                    will analyze it and create a support ticket.
+                </p>
+
+
+                <div class="complaint-box">
+
+                    <div class="complaint-icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Have a problem?
+                    </h3>
+
+                    <p>
+                        Submit your complaint and get a smart
+                        analysis in seconds.
+                    </p>
+
+                    <button
+                        class="primary-btn"
+                        onclick="window.location.href='/complaint.html'"
+                    >
+                        Submit Complaint →
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>
+                    Quick Actions
+                </h2>
+
+
+                <div
+                    class="quick-action"
+                    onclick="window.location.href='/complaint.html'"
+                >
+
+                    <div class="action-icon">
+                        📝
+                    </div>
+
+                    <div>
+                        <h4>New Complaint</h4>
+                        <p>Submit a new complaint</p>
+                    </div>
+
+                </div>
+
+
+                <div
+    class="quick-action"
+    onclick="document.querySelector('.recent').scrollIntoView({
+        behavior: 'smooth'
+    })"
+>
+
+    <div class="action-icon">
+        🎫
+    </div>
+
+    <div>
+        <h4>My Tickets</h4>
+        <p>View your complaints</p>
+    </div>
+
+</div>
+
+
+                <div class="quick-action">
+
+                    <div class="action-icon">
+                        🔍
+                    </div>
+
+                    <div>
+                        <h4>Track Ticket</h4>
+                        <p>Check complaint status</p>
+                    </div>
+
+                </div>
+
+
+                <div
+    class="quick-action"
+    onclick="trackTicket()"
+>
+
+   <div 
+    class="quick-action"
+    onclick="window.location.href='/track.html'"
+>
+
+    <div class="action-icon">
+        🔍
+    </div>
+
+    <div>
+        <h4>Track Ticket</h4>
+        <p>Check complaint status</p>
+    </div>
+
+</div>
+
+        </section>
+
+
+        <section class="card recent">
+
+           <div style="
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+">
+<section class="card recent">
+
+    <div style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    ">
+
+        <h2 style="margin-bottom: 0;">
+            Recent Complaints
+        </h2>
+
+        <div style="
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        ">
+
+            <input
+                type="text"
+                id="ticketSearch"
+                placeholder="Search ticket..."
+                oninput="filterTickets()"
+                style="
+                    padding: 10px 14px;
+                    border: 1px solid #d9dce3;
+                    border-radius: 8px;
+                    outline: none;
+                    width: 220px;
+                "
+            >
+
+            <button
+                class="secondary-btn"
+                onclick="loadComplaints()"
+            >
+                ↻ Refresh
+            </button>
+
+        </div>
+
+    </div>
+
+    <h2 style="margin-bottom: 0;">
+        Recent Complaints
+    </h2>
+
+    <input
+        type="text"
+        id="ticketSearch"
+        placeholder="Search ticket..."
+        oninput="filterTickets()"
+        style="
+            padding: 10px 14px;
+            border: 1px solid #d9dce3;
+            border-radius: 8px;
+            outline: none;
+            width: 220px;
+        "
+    >
+
+</div>
+            <div class="ticket">
+
+                <div>
+
+                    <div class="ticket-id">
+                        No complaints yet
+                    </div>
+
+                    <div class="ticket-category">
+                        Your submitted complaints will appear here.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+<script>
+
+function logout() {
+    window.location.href = "/login.html";
+}
+async function trackTicket() {
+
+    const ticketId = prompt(
+        "Enter your Complaint Ticket ID:"
+    );
+
+    if (!ticketId) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch("/api/complaints");
+
+        const data = await response.json();
+
+        if (!data.success) {
+            alert("Unable to load complaints.");
+            return;
+        }
+
+        const complaint = data.complaints.find(
+            item =>
+                item.ticketId.toLowerCase() ===
+                ticketId.trim().toLowerCase()
+        );
+
+        if (!complaint) {
+
+            alert(
+                "Ticket not found. Please check the Ticket ID."
+            );
+
+            return;
+        }
+
+        
+const statusMessage =
+    complaint.status === "Resolved"
+        ? "Your complaint has been resolved."
+        : complaint.status === "In Progress"
+        ? "Your complaint is currently being processed."
+        : "Your complaint has been received and is currently open.";
+
+alert(
+    "🎫 Ticket: " + complaint.ticketId +
+    "\n\nCategory: " + complaint.category +
+    "\nCompany: " + complaint.company +
+    "\nStatus: " + complaint.status +
+    "\n\n" + statusMessage
+);
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to track the ticket."
+        );
+
+    }
+
+}
+
+async function updateStatus(ticketId, newStatus) {
+
+    try {
+
+        const response = await fetch(
+            "/api/complaints/" + ticketId + "/status",
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    status: newStatus
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+            alert(data.message || "Unable to update status.");
+            return;
+        }
+
+        loadComplaints();
+
+function filterTickets() {
+
+    const search =
+        document.getElementById("ticketSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const tickets =
+        document.querySelectorAll(".recent .ticket");
+
+    tickets.forEach(ticket => {
+
+        const text =
+            ticket.textContent.toLowerCase();
+
+        ticket.style.display =
+            text.includes(search)
+                ? "flex"
+                : "none";
+
+    });
+
+}
+    }
+
+    catch (error) {
+
+        console.error("Status update error:", error);
+
+        alert("Unable to update complaint status.");
+
+    }
+
+}
+
+
+async function loadComplaints() {
+
+    try {
+
+        const response = await fetch("/api/complaints");
+
+        const data = await response.json();
+
+        if (!data.success) {
+            return;
+        }
+
+        const complaints = data.complaints;
+
+
+        /* =========================
+           UPDATE STATISTICS
+        ========================= */
+
+        const total = complaints.length;
+
+        const open = complaints.filter(
+            complaint => complaint.status === "Open"
+        ).length;
+
+        const inProgress = complaints.filter(
+            complaint => complaint.status === "In Progress"
+        ).length;
+
+        const resolved = complaints.filter(
+            complaint => complaint.status === "Resolved"
+        ).length;
+
+
+        const statCards =
+            document.querySelectorAll(".stat-card h3");
+
+        statCards[0].textContent = total;
+        statCards[1].textContent = open;
+        statCards[2].textContent = inProgress;
+        statCards[3].textContent = resolved;
+
+
+        /* =========================
+           RECENT COMPLAINTS
+        ========================= */
+
+        const recentSection =
+            document.querySelector(".recent");
+
+
+        if (complaints.length === 0) {
+
+            recentSection.innerHTML = `
+
+                <h2>Recent Complaints</h2>
+
+                <div class="ticket">
+
+                    <div>
+
+                        <div class="ticket-id">
+                            No complaints yet
+                        </div>
+
+                        <div class="ticket-category">
+                            Your submitted complaints will appear here.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        let html = `
+            <h2>Recent Complaints</h2>
+        `;
+
+
+        complaints.slice().reverse().forEach(complaint => {
+
+            let statusClass = "open";
+
+            if (complaint.status === "Resolved") {
+                statusClass = "resolved";
+            }
+
+           html += `
+
+    <div class="ticket" style="align-items: flex-start;">
+
+        <div style="flex: 1;">
+
+            <div class="ticket-id">
+                ${complaint.ticketId}
+            </div>
+
+            <div class="ticket-category">
+
+                ${complaint.category}
+
+                ${
+                    complaint.company !== "General Support"
+                    ? " • " + complaint.company
+                    : ""
+                }
+
+            </div>
+
+            <div style="
+                margin-top: 8px;
+                color: #667085;
+                font-size: 13px;
+                line-height: 1.7;
+            ">
+
+                ${
+                    complaint.orderId
+                    ? "Order ID: " + complaint.orderId + "<br>"
+                    : ""
+                }
+
+                ${
+                    complaint.transactionId
+                    ? "Transaction ID: " + complaint.transactionId + "<br>"
+                    : ""
+                }
+
+                ${
+                    complaint.customerId
+                    ? "Customer ID: " + complaint.customerId + "<br>"
+                    : ""
+                }
+
+                ${
+                    complaint.serviceProvider
+                    ? "Service Provider: " + complaint.serviceProvider + "<br>"
+                    : ""
+                }
+
+                ${
+                    complaint.productId
+                    ? "Product ID: " + complaint.productId + "<br>"
+                    : ""
+                }
+${
+    complaint.latitude && complaint.longitude
+    ? "📍 Location: " +
+      complaint.latitude +
+      ", " +
+      complaint.longitude +
+      "<br>" +
+      "<a href='https://www.google.com/maps?q=" +
+      complaint.latitude +
+      "," +
+      complaint.longitude +
+      "' target='_blank'>🗺️ View Location</a>"
+    : ""
+}
+                ${
+                    complaint.externalTicketId
+                    ? "External Ticket: " + complaint.externalTicketId
+                    : ""
+                }
+${
+    complaint.summary
+    ? "<br>Summary: " + complaint.summary
+    : ""
+}
+    ${
+    complaint.urgency
+    ? "<br>Urgency: " + complaint.urgency
+    : ""
+}
+
+${
+    complaint.priority
+    ? "<br>Priority: " + complaint.priority
+    : ""
+}
+    ${
+    complaint.complaint
+    ? "<br>Complaint: " + complaint.complaint
+    : ""
+}
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <select
+                onchange="updateStatus(
+                    '${complaint.ticketId}',
+                    this.value
+                )"
+            >
+
+                <option
+                    value="Open"
+                    ${complaint.status === "Open" ? "selected" : ""}
+                >
+                    Open
+                </option>
+
+                <option
+                    value="In Progress"
+                    ${complaint.status === "In Progress" ? "selected" : ""}
+                >
+                    In Progress
+                </option>
+
+                <option
+                    value="Resolved"
+                    ${complaint.status === "Resolved" ? "selected" : ""}
+                >
+                    Resolved
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+`;
+
+        });
+
+
+        recentSection.innerHTML = html;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Unable to load complaints:",
+            error
+        );
+
+    }
+
+}
+
+function filterTickets() {
+
+    const search =
+        document.getElementById("ticketSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const tickets =
+        document.querySelectorAll(".recent .ticket");
+
+    tickets.forEach(ticket => {
+
+        const text =
+            ticket.textContent.toLowerCase();
+
+        ticket.style.display =
+            text.includes(search)
+                ? "flex"
+                : "none";
+
+    });
+
+}
+loadComplaints();
+
+</script>
+</body>
+
+</html>

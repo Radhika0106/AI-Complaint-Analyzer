@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Submit Complaint | AI Complaint Analyzer</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .navbar {
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #4f46e5;
+        }
+
+        .back {
+            color: #667085;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #667085;
+            line-height: 1.5;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d9dce3;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #4f46e5;
+        }
+
+        textarea {
+            min-height: 180px;
+            resize: vertical;
+        }
+
+        .hint {
+            margin-top: 7px;
+            font-size: 13px;
+            color: #667085;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .submit-btn {
+            flex: 1;
+            padding: 15px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .clear-btn {
+            padding: 15px 25px;
+            background: #eef2ff;
+            color: #4f46e5;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 12px;
+            background: #f8f9ff;
+            border: 1px solid #dfe3ff;
+        }
+
+        .result h2 {
+            margin-bottom: 20px;
+        }
+
+        .result-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-size: 13px;
+            color: #667085;
+            margin-bottom: 4px;
+        }
+
+        .result-value {
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+
+            .card {
+                padding: 25px 20px;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            AI <span>Complaint Analyzer</span>
+        </div>
+
+        <a
+            href="/dashboard.html"
+            class="back"
+        >
+            ← Back to Dashboard
+        </a>
+
+    </nav>
+
+
+    <main class="container">
+
+        <div class="header">
+
+            <h1>
+                Submit a Complaint
+            </h1>
+
+            <p>
+                Describe your problem clearly. Our AI system will
+                analyze your complaint and generate a smart support ticket.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <form id="complaintForm">
+
+
+                <div class="form-group">
+
+                    <label for="category">
+                        Complaint Category
+                    </label>
+
+                    <select id="category" required>
+
+                        <option value="">
+                            Select a category
+                        </option>
+
+                        <option value="Payment">
+                            Payment
+                        </option>
+
+                        <option value="Delivery">
+                            Delivery
+                        </option>
+
+                        <option value="Technical">
+                            Technical Issue
+                        </option>
+
+                        <option value="Account">
+                            Account
+                        </option>
+
+                        <option value="Product">
+                            Product
+                        </option>
+
+                        <option value="Service">
+                            Service
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+<div id="dynamicFields"></div>
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="complaint">
+                        Describe Your Complaint
+                    </label>
+
+                    <textarea
+                        id="complaint"
+                        placeholder="Example: I made a payment but the amount was deducted from my account and the transaction is still showing as pending."
+                        required
+                    ></textarea>
+<div id="locationSection" style="display:none; margin-top:15px;">
+
+    <button type="button" id="getLocationBtn" class="secondary-btn">
+        📍 Use My Live Location
+    </button>
+
+    <p id="locationStatus" style="margin-top:8px; color:#667085;">
+        Location is required for civic complaints.
+    </p>
+
+    <input type="hidden" id="latitude">
+    <input type="hidden" id="longitude">
+
+</div>
+                    <p class="hint">
+                        Please provide as much detail as possible.
+                    </p>
+
+                </div>
+
+
+                <div class="button-row">
+
+                    <button
+                        type="submit"
+                        class="submit-btn"
+                    >
+                        Analyze Complaint →
+                    </button>
+
+                    <button
+                        type="reset"
+                        class="clear-btn"
+                    >
+                        Clear
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <div
+                class="result"
+                id="result"
+            >
+
+                <h2>
+                    AI Analysis Result
+                </h2>
+
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        Category
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultCategory"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        Sentiment
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultSentiment"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        Urgency
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultUrgency"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        Priority
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultPriority"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        Summary
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultSummary"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <div class="result-label">
+                        Suggested Action
+                    </div>
+
+                    <div
+                        class="result-value"
+                        id="resultAction"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+document.getElementById("getLocationBtn").addEventListener("click", function () {
+
+    const status = document.getElementById("locationStatus");
+
+    if (!navigator.geolocation) {
+        status.textContent =
+            "❌ Location is not supported by this browser.";
+        return;
+    }
+
+    status.textContent = "📍 Getting your live location...";
+
+    navigator.geolocation.getCurrentPosition(
+
+        function (position) {
+
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            document.getElementById("latitude").value = latitude;
+            document.getElementById("longitude").value = longitude;
+
+            status.textContent =
+                "✓ Live location captured successfully.";
+
+            console.log("Latitude:", latitude);
+            console.log("Longitude:", longitude);
+        },
+
+        function () {
+
+            status.textContent =
+                "❌ Location permission was not granted.";
+        }
+    );
+
+});
+
+
+
+        const complaintInput = document.getElementById("complaint");
+const locationSection = document.getElementById("locationSection");
+
+complaintInput.addEventListener("input", function () {
+
+    const text = complaintInput.value.toLowerCase();
+
+    const civicWords = [
+        "road",
+        "pothole",
+        "street",
+        "garbage",
+        "drainage",
+        "sewage",
+        "streetlight",
+        "water leakage"
+    ];
+
+    const isCivicComplaint = civicWords.some(word =>
+        text.includes(word)
+    );
+
+    if (isCivicComplaint) {
+        locationSection.style.display = "block";
+    } else {
+        locationSection.style.display = "none";
+    }
+
+});
+
+        document.getElementById("complaintForm").addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            const category = document.getElementById("category").value;
+
+            const complaint = document.getElementById("complaint").value;
+
+            try {
+const complaintText = document
+    .getElementById("complaint")
+    .value
+    .toLowerCase();
+
+const civicWords = [
+    "road",
+    "pothole",
+    "street",
+    "garbage",
+    "drainage",
+    "sewage",
+    "streetlight",
+    "water leakage"
+];
+
+const isCivicComplaint = civicWords.some(word =>
+    complaintText.includes(word)
+);
+
+const latitude =
+    document.getElementById("latitude").value;
+
+const longitude =
+    document.getElementById("longitude").value;
+
+if (isCivicComplaint && (!latitude || !longitude)) {
+
+    alert(
+        "📍 Please allow and capture your live location before submitting a civic complaint."
+    );
+
+    return;
+}
+                const response = await fetch("/api/analyze", {
+                    
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                   body: JSON.stringify({
+                        category: category,
+                        complaint: complaint,
+                        latitude: document.getElementById("latitude").value,
+longitude: document.getElementById("longitude").value,
+
+                     orderId:
+        document.getElementById("orderId")?.value || "",
+
+    transactionId:
+        document.getElementById("transactionId")?.value || "",
+
+    customerId:
+        document.getElementById("customerId")?.value || "",
+
+    serviceProvider:
+        document.getElementById("serviceProvider")?.value || "",
+
+    servicePhone:
+        document.getElementById("servicePhone")?.value || "",
+
+    productId:
+        document.getElementById("productId")?.value || "",
+        latitude: document.getElementById("latitude").value,
+longitude: document.getElementById("longitude").value,
+})
+
+                });
+
+
+                const result = await response.json();
+
+
+                if (result.success) {
+
+    sessionStorage.setItem(
+        "complaintResult",
+        JSON.stringify(result)
+    );
+
+    window.location.href = "/routing.html";
+
+} else {
+
+    alert("Unable to analyze complaint.");
+
+}
+            } catch (error) {
+
+                console.error(error);
+
+                alert("Unable to connect to the server.");
+
+            }
+
+        });
+
+    </script>
+<script>
+
+const categorySelect = document.getElementById("category");
+const dynamicFields = document.getElementById("dynamicFields");
+
+categorySelect.addEventListener("change", function () {
+
+    const category = this.value;
+
+    dynamicFields.innerHTML = "";
+
+    if (category === "Delivery") {
+
+        dynamicFields.innerHTML = `
+            <div class="form-group">
+                <label>Order ID</label>
+                <input
+                    type="text"
+                    id="orderId"
+                    placeholder="Enter your Order ID"
+                    required
+                >
+            </div>
+        `;
+
+    }
+
+    else if (category === "Payment") {
+
+        dynamicFields.innerHTML = `
+            <div class="form-group">
+                <label>Transaction / Payment ID</label>
+                <input
+                    type="text"
+                    id="transactionId"
+                    placeholder="Enter Transaction ID"
+                    required
+                >
+            </div>
+        `;
+
+    }
+
+    else if (category === "Account") {
+
+        dynamicFields.innerHTML = `
+            <div class="form-group">
+                <label>Account / Customer ID</label>
+                <input
+                    type="text"
+                    id="customerId"
+                    placeholder="Enter Customer ID"
+                    required
+                >
+            </div>
+        `;
+
+    }
+
+    else if (category === "Technical") {
+
+        dynamicFields.innerHTML = `
+            <div class="form-group">
+                <label>Service / Network Provider</label>
+                <input
+                    type="text"
+                    id="serviceProvider"
+                    placeholder="Example: Jio, Airtel, Wi-Fi"
+                    required
+                >
+
+                <label style="margin-top:15px;">
+                    Registered Mobile Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="servicePhone"
+                    placeholder="Enter mobile number"
+                    required
+                >
+            </div>
+        `;
+
+    }
+
+    else if (category === "Product") {
+
+        dynamicFields.innerHTML = `
+            <div class="form-group">
+                <label>Product / Order ID</label>
+                <input
+                    type="text"
+                    id="productId"
+                    placeholder="Enter Product or Order ID"
+                    required
+                >
+            </div>
+        `;
+
+    }
+
+    else if (category === "Service") {
+
+        dynamicFields.innerHTML = `
+            <div class="form-group">
+                <label>Service Provider</label>
+                <input
+                    type="text"
+                    id="serviceProvider"
+                    placeholder="Enter service provider"
+                    required
+                >
+            </div>
+        `;
+
+    }
+
+});
+
+</script>
+</body>
+
+</html>

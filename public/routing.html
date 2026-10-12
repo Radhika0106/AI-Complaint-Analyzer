@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Routing | AI Complaint Analyzer</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .navbar {
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #4f46e5;
+        }
+
+        .back {
+            color: #667085;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 40px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+        }
+
+        .success {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .success-icon {
+            width: 65px;
+            height: 65px;
+            margin: auto;
+            border-radius: 50%;
+            background: #eef2ff;
+            color: #4f46e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .success h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .success p {
+            color: #667085;
+        }
+
+        .analysis {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 25px;
+        }
+
+        .analysis h2 {
+            margin-bottom: 20px;
+        }
+
+        .info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .info-box {
+            background: #f8f9fc;
+            padding: 18px;
+            border-radius: 10px;
+        }
+
+        .label {
+            color: #667085;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .value {
+            font-weight: bold;
+        }
+
+        .route {
+            background: #eef2ff;
+            border-radius: 14px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .route-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .route h2 {
+            margin-bottom: 8px;
+        }
+
+        .route p {
+            color: #667085;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .support-btn {
+            display: inline-block;
+            padding: 14px 25px;
+            background: #4f46e5;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .ticket {
+            margin-top: 25px;
+            padding: 18px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .ticket p {
+            color: #667085;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .ticket strong {
+            font-size: 18px;
+        }
+
+        @media (max-width: 600px) {
+
+            .card {
+                padding: 25px 20px;
+            }
+
+            .info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            AI <span>Complaint Analyzer</span>
+        </div>
+
+        <a href="/dashboard.html" class="back">
+            ← Dashboard
+        </a>
+
+    </nav>
+
+
+    <main class="container">
+
+        <div class="card">
+
+            <div class="success">
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+                <h1>
+                    Complaint Analyzed
+                </h1>
+
+                <p>
+                    We've analyzed your complaint and identified the
+                    appropriate support destination.
+                </p>
+
+            </div>
+
+
+            <div class="analysis">
+
+                <h2>
+                    Analysis Result
+                </h2>
+
+
+                <div class="info">
+
+                    <div class="info-box">
+
+                        <div class="label">
+                            Category
+                        </div>
+
+                        <div class="value" id="category">
+                            Payment
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="label">
+                            Company / Service
+                        </div>
+
+                        <div class="value" id="company">
+                            Amazon
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="label">
+                            Urgency
+                        </div>
+
+                        <div class="value" id="urgency">
+                            Medium
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="label">
+                            Priority
+                        </div>
+
+                        <div class="value" id="priority">
+                            Medium
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="route">
+
+                    <div class="route-icon">
+                        🛒
+                    </div>
+
+                    <h2 id="destination">
+                        Amazon Support
+                    </h2>
+
+                    <p id="routeMessage">
+                        Your complaint appears to be related
+                        to Amazon payment support.
+                    </p>
+
+                   <div class="support-btn" id="supportButton">
+   Amazon Service Detected ✓
+</div>
+
+                </div>
+
+
+                <div class="ticket">
+
+    <p>
+        Your Complaint Ticket ID
+    </p>
+
+    <strong id="ticketId">
+        TKT-0000
+    </strong>
+
+</div>
+
+<div class="ticket">
+
+    <p>
+        External Service Ticket ID
+    </p>
+
+    <strong id="externalTicketId">
+        Pending
+    </strong>
+
+</div>
+
+<div class="ticket">
+
+    <p>
+        Submission Status
+    </p>
+
+    <strong id="submissionStatus">
+        Processing...
+    </strong>
+
+</div>
+<div class="ticket" id="complaintDetailsBox">
+    <div id="locationDetails" style="margin-top:15px;">
+    📍 Location: Not available
+</div>
+
+    <p>
+        Complaint Details
+    </p>
+
+    <div id="complaintDetails">
+        -
+    </div>
+
+</div>
+<div class="ticket">
+
+    <p>
+        API Routing
+    </p>
+
+    <strong id="apiRoutingStatus">
+        Processing...
+    </strong>
+
+</div>
+            
+
+    </main>
+
+<script>
+
+    const data = JSON.parse(
+        sessionStorage.getItem("complaintResult")
+    );
+
+    if (data) {
+
+        document.getElementById("category").textContent =
+            data.category || "General";
+
+        document.getElementById("company").textContent =
+            data.company || "General Support";
+
+        document.getElementById("urgency").textContent =
+            data.urgency || "Medium";
+
+        document.getElementById("priority").textContent =
+            data.priority || "Medium";
+
+        document.getElementById("destination").textContent =
+            data.destination || "General Support";
+
+        document.getElementById("routeMessage").textContent =
+    "Your complaint has been analyzed and automatically routed to " +
+    (data.company || "the appropriate support service") +
+    ".";
+
+       
+        document.querySelector(".route-icon").textContent =
+            data.icon || "🎫";
+
+        document.getElementById("ticketId").textContent =
+            data.ticketId || "TKT-0000";
+const locationDetails =
+    document.getElementById("locationDetails");
+
+
+if (data.latitude && data.longitude) {
+
+    locationDetails.innerHTML = `
+        <strong>📍 Complaint Location</strong>
+        <br>
+        Latitude: ${data.latitude}
+        <br>
+        Longitude: ${data.longitude}
+        <br><br>
+
+        <a
+            href="https://www.google.com/maps?q=${data.latitude},${data.longitude}"
+            target="_blank"
+            style="
+                display:inline-block;
+                padding:10px 16px;
+                background:#4f46e5;
+                color:white;
+                text-decoration:none;
+                border-radius:8px;
+                font-weight:bold;
+            "
+        >
+            🗺️ View Exact Location
+        </a>
+    `;
+
+} else {
+
+   
+
+
+    locationDetails.textContent =
+        "📍 Location: Not available";
+
+}
+
+        /* Complaint Details */
+
+        let details = "";
+
+        if (data.orderId) {
+            details += "Order ID: " + data.orderId + "<br>";
+        }
+
+        if (data.transactionId) {
+            details += "Transaction ID: " + data.transactionId + "<br>";
+        }
+
+        if (data.customerId) {
+            details += "Customer ID: " + data.customerId + "<br>";
+        }
+
+        if (data.serviceProvider) {
+            details += "Service Provider: " + data.serviceProvider + "<br>";
+        }
+
+        if (data.servicePhone) {
+            details += "Registered Mobile: " + data.servicePhone + "<br>";
+        }
+
+        if (data.productId) {
+            details += "Product / Order ID: " + data.productId + "<br>";
+        }
+
+        document.getElementById("complaintDetails").innerHTML =
+            details || "No additional details provided.";
+
+
+        /* External submission */
+
+        document.getElementById("externalTicketId").textContent =
+            data.externalTicketId || "Pending";
+
+        const submissionStatus = document.getElementById("submissionStatus");
+if (data.submissionMessage) {
+    submissionStatus.textContent = data.submissionMessage;
+} else {
+    submissionStatus.textContent =
+        "Complaint submitted successfully.";
+}
+const apiRoutingStatus =
+    document.getElementById("apiRoutingStatus");
+
+if (apiRoutingStatus) {
+
+    if (data.externalTicketId) {
+
+        apiRoutingStatus.textContent =
+            "✓ Complaint sent to " +
+            (data.company || "external service") +
+            " integration";
+
+    } else {
+
+        apiRoutingStatus.textContent =
+            "⚠ External submission pending";
+
+    }
+}
+
+/* SUPPORT BUTTON */
+
+const supportButton =
+    document.getElementById("supportButton");
+
+if (supportButton) {
+
+    supportButton.style.cursor = "default";
+
+    supportButton.textContent =
+        "Complaint Routed Automatically ✓";
+
+}
+
+    }
+
+</script>
+
+</body>
+
+</html> 
